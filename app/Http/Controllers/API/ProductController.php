@@ -33,13 +33,15 @@ class ProductController extends BaseController
 
         $validator = Validator::make($input, [
             'name' => 'required',
-            'detail' => 'required'
+            'detail' => 'required',
+            'price' => 'required',
+            'status' => 'required',
+            'category_id' => 'required'
         ]);
 
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());
         }
-
         $product = Product::create($input);
 
         return $this->sendResponse(new ProductResource($product), 'Product created successfully.');
