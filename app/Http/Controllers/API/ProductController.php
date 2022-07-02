@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\Product;
+use App\Models\Media;
 use Validator;
 use App\Http\Resources\ProductResource;
 
@@ -42,7 +43,19 @@ class ProductController extends BaseController
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());
         }
+        // dd(Product::class);
         $product = Product::create($input);
+        if(!empty($request->images)){
+            foreach($request->images as $image){
+                Media::create(
+                    [
+                        'imageable_type' => Product::class,
+                        'imageable_id' => $product->id,
+                        'url' => $image
+                    ]
+                    );
+            }
+        }
 
         return $this->sendResponse(new ProductResource($product), 'Product created successfully.');
     }
