@@ -43,7 +43,6 @@ class ProductController extends BaseController
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());
         }
-        // dd(Product::class);
         $product = Product::create($input);
         if(!empty($request->images)){
             foreach($request->images as $image){
