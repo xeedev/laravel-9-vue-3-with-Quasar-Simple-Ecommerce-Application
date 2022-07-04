@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\Order;
 use Validator;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\OrderResource;
 
 class OrdersController extends BaseController
@@ -40,7 +41,32 @@ class OrdersController extends BaseController
      */
     public function store(Request $request)
     {
-        //
+        $user_id = Auth::user()->id;
+        $validator = Validator::make($request->all(), [
+            'description' => 'required',
+            'total' => 'required',
+            'transaction_id' => 'required',
+            'address' => 'required',
+            'city' => 'required',
+            'country' => 'required'
+        ]);
+
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors());
+        }
+        $order = Order::create(
+            [
+                'user_id' => $user_id,
+                'description' => $request->description,
+                'total' => $request->total,
+                'transaction_id' => $request->transaction_id,
+                'address' => $request->address,
+                'city' => $request->city,
+                'country' => $request->country,
+                'status' => $request->status,
+            ]
+        );
+        return $this->sendResponse(new OrderResource($order), 'Order created successfully.');
     }
 
     /**
