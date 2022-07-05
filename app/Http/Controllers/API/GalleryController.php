@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Gallery;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
-class GalleryController extends Controller
+class GalleryController extends BaseController
 {
     /**
      * Display a listing of the resource.
@@ -35,7 +38,26 @@ class GalleryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'description' => 'sometimes',
+            'images' => 'required',
+            'page_number' => 'required',
+        ]);
+
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors());
+        }
+        if(!empty($request->images)){
+            foreach($request->images as $image){
+                Gallery::create(
+                    [
+                        'description' => $request->description ?? null,
+                        'page_number' => $request->page_number,
+                        'url' => $image
+                    ]
+                );
+            }
+        }
     }
 
     /**
@@ -81,5 +103,32 @@ class GalleryController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function imageUpload(Request $request)
+    {
+        $files = $request->file('files');
+        $type = $request->input('type');
+        $fileURLs = [];
+        $storagePath = 'public/media';
+
+        foreach ($files as $file) {
+            $fName = $this->generateRandomString();
+            $filename = time() . '-' . $fName . '.' . $file->getClientOriginalExtension();
+            $url = Storage::disk('local')->putFileAs($storagePath, $file, $filename);
+            $fileURLs[] = $url;
+        }
+        return response()->json(['status' => 'success', 'message' => 'file has been uploaded successfully', 'urls' => $fileURLs], 200);
+    }
+
+    private function generateRandomString($length = 10)
+    {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
     }
 }

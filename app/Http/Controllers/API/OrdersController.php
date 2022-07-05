@@ -5,9 +5,9 @@ namespace App\Http\Controllers\API;
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\Order;
-use Validator;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\OrderResource;
+use Illuminate\Support\Facades\Validator;
 
 class OrdersController extends BaseController
 {
