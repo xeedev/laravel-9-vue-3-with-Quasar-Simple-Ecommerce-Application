@@ -17,6 +17,7 @@ class CreateGalleriesTable extends Migration
             $table->id();
             $table->text('description')->nullable();
             $table->text('url');
+            $table->unsignedBigInteger('page_number');
             $table->timestamps();
         });
     }
