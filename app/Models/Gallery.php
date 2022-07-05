@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Gallery extends Model
 {
     use HasFactory;
+    protected $fillable = [
+      'description',
+      'url',
+      'page_number'
+    ];
 }
