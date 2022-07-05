@@ -7,6 +7,7 @@ use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\CategoriesController;
 use App\Http\Controllers\API\OrdersController;
+use App\Http\Controllers\API\GalleryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,10 +22,12 @@ use App\Http\Controllers\API\OrdersController;
 
 Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [RegisterController::class, 'login']);
+Route::post('imageUpload',[GalleryController::class,'imageUpload']);
+Route::resource('products', ProductController::class);
+Route::resource('gallery', GalleryController::class);
 
 
 Route::middleware('auth:api')->group( function () {
-    Route::resource('products', ProductController::class);
     Route::resource('categories', CategoriesController::class);
     Route::resource('orders', OrdersController::class);
     Route::post('logout', [RegisterController::class, 'logout']);
