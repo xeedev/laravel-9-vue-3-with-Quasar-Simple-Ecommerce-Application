@@ -4,6 +4,10 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Gallery;
+use App\Models\Order;
+use App\Models\Product;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -130,5 +134,19 @@ class GalleryController extends BaseController
             $randomString .= $characters[rand(0, $charactersLength - 1)];
         }
         return $randomString;
+    }
+
+    public function getStatistics(){
+        $customers = User::all();
+        $this->data['customers'] = $customers->count()-1;
+        $products = Product::all();
+        $this->data['products'] = $products->count();
+        $orders = Order::all();
+        $this->data['orders'] = $orders->count();
+        $todaysOrders = Order::whereDate('created_at', Carbon::today())->get();
+        $this->data['todaysOrders'] = $todaysOrders->count();
+        $pendingOrders = Order::where('status', 'pending')->get();
+        $this->data['pendingOrders'] = $pendingOrders->count();
+        return $this->data;
     }
 }
