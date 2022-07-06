@@ -40,11 +40,6 @@ class RegisterController extends BaseController
         return $this->sendResponse($success, 'User register successfully.');
     }
 
-    /**
-     * Login api
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -63,7 +58,7 @@ class RegisterController extends BaseController
             return $this->sendResponse($success, 'User login successfully.');
         }
         else{
-            return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
+            return response()->json(['error' => 'invalid credentials']);
         }
     }
     public function logout()

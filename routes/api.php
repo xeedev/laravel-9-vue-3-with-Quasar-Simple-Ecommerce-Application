@@ -31,4 +31,5 @@ Route::middleware('auth:api')->group( function () {
     Route::resource('categories', CategoriesController::class);
     Route::resource('orders', OrdersController::class);
     Route::post('logout', [RegisterController::class, 'logout']);
+    Route::get('/validate-token', function (Request $request) {return response()->json(['authenticated' => true]);});
 });
