@@ -22,7 +22,6 @@ use App\Http\Controllers\API\GalleryController;
 
 Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [RegisterController::class, 'login']);
-Route::post('imageUpload',[GalleryController::class,'imageUpload']);
 Route::resource('products', ProductController::class);
 Route::resource('gallery', GalleryController::class);
 
@@ -30,6 +29,7 @@ Route::resource('gallery', GalleryController::class);
 Route::middleware('auth:api')->group( function () {
     Route::resource('categories', CategoriesController::class);
     Route::resource('orders', OrdersController::class);
+    Route::post('imageUpload',[GalleryController::class,'imageUpload']);
     Route::post('logout', [RegisterController::class, 'logout']);
     Route::get('/validate-token', function (Request $request) {return response()->json(['authenticated' => true]);});
     Route::get('statistics',[GalleryController::class,'getStatistics']);
