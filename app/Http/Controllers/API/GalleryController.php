@@ -112,7 +112,6 @@ class GalleryController extends BaseController
     public function imageUpload(Request $request)
     {
         $files = $request->file('files');
-        $type = $request->input('type');
         $fileURLs = [];
         $storagePath = 'public/media';
 
