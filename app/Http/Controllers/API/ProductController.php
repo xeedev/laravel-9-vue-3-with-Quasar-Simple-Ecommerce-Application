@@ -44,8 +44,8 @@ class ProductController extends BaseController
             return $this->sendError('Validation Error.', $validator->errors());
         }
         $product = Product::create($input);
-        if(!empty($request->images)){
-            foreach($request->images as $image){
+        if(!empty($request->uploadedImages)){
+            foreach($request->uploadedImages as $image){
                 Media::create(
                     [
                         'imageable_type' => Product::class,
