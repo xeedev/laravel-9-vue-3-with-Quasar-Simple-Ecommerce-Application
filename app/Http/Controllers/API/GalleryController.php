@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\GalleryResource;
 use App\Models\Category;
 use App\Models\Gallery;
 use App\Models\Order;
@@ -22,7 +23,9 @@ class GalleryController extends BaseController
      */
     public function index()
     {
-        //
+        $gallery = Gallery::all();
+
+        return $this->sendResponse(GalleryResource::collection($gallery), 'Gallery Images retrieved successfully.');
     }
 
     /**
@@ -44,20 +47,19 @@ class GalleryController extends BaseController
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'description' => 'sometimes',
             'images' => 'required',
-            'page_number' => 'required',
         ]);
 
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());
         }
+        Gallery::where('page_number',1)->delete();
         if(!empty($request->images)){
             foreach($request->images as $image){
                 Gallery::create(
                     [
-                        'description' => $request->description ?? null,
-                        'page_number' => $request->page_number,
+                        'description' => null,
+                        'page_number' => 1,
                         'url' => $image
                     ]
                 );
