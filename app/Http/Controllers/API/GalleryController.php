@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Gallery;
 use App\Models\Order;
 use App\Models\Product;
@@ -142,9 +143,11 @@ class GalleryController extends BaseController
         $this->data['products'] = $products->count();
         $orders = Order::all();
         $this->data['orders'] = $orders->count();
+        $categories = Category::all();
+        $this->data['categories'] = $categories->count();
         $todaysOrders = Order::whereDate('created_at', Carbon::today())->get();
         $this->data['todaysOrders'] = $todaysOrders->count();
-        $pendingOrders = Order::where('status', 'pending')->get();
+        $pendingOrders = Order::where('status', 'unpaid')->get();
         $this->data['pendingOrders'] = $pendingOrders->count();
         return $this->data;
     }
