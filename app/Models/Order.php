@@ -12,6 +12,7 @@ class Order extends Model
         'user_id',
         'description',
         'total',
+        'contact',
         'transaction_id',
         'address',
         'city',
