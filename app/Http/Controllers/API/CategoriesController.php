@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
 use App\Http\Controllers\API\BaseController as BaseController;
 use Illuminate\Http\Request;
 use App\Models\Category;
@@ -45,13 +44,15 @@ class CategoriesController extends BaseController
 
         $validator = Validator::make($input, [
             'type' => 'required',
+            'description' => 'sometimes',
         ]);
 
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());
         }
 
-        $product = Category::create($input);
+        $category = Category::create($input);
+        return $this->sendResponse(new CategoryResource($category), 'Category created successfully.');
     }
 
     /**
@@ -62,7 +63,13 @@ class CategoriesController extends BaseController
      */
     public function show($id)
     {
-        //
+        $product = Category::find($id);
+
+        if (is_null($product)) {
+            return $this->sendError('Category not found.');
+        }
+
+        return $this->sendResponse(new CategoryResource($product), 'Category retrieved successfully.');
     }
 
     /**
@@ -83,9 +90,23 @@ class CategoriesController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Category $category)
     {
-        //
+        $input = $request->all();
+
+        $validator = Validator::make($input, [
+            'type' => 'required',
+            'description' => 'required',
+        ]);
+
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors());
+        }
+
+        $category->type = $input['type'];
+        $category->description = $input['description'];
+        $category->save();
+        return $this->sendResponse(new CategoryResource($category), 'Category updated successfully.');
     }
 
     /**
@@ -94,8 +115,9 @@ class CategoriesController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Category $category)
     {
-        //
+        $category->delete();
+        return $this->sendResponse([], 'Category deleted successfully.');
     }
 }
