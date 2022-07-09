@@ -89,7 +89,10 @@ class ProductController extends BaseController
 
         $validator = Validator::make($input, [
             'name' => 'required',
-            'detail' => 'required'
+            'detail' => 'required',
+            'price' => 'required',
+            'status' => 'required',
+            'category_id' => 'required'
         ]);
 
         if($validator->fails()){
@@ -98,7 +101,22 @@ class ProductController extends BaseController
 
         $product->name = $input['name'];
         $product->detail = $input['detail'];
+        $product->price = $input['price'];
+        $product->status = $input['status'];
+        $product->category_id = $input['category_id'];
         $product->save();
+        $product->media()->delete();
+        if(!empty($request->uploadedImages)){
+            foreach($request->uploadedImages as $image){
+                Media::create(
+                    [
+                        'imageable_type' => Product::class,
+                        'imageable_id' => $product->id,
+                        'url' => $image
+                    ]
+                );
+            }
+        }
 
         return $this->sendResponse(new ProductResource($product), 'Product updated successfully.');
     }
