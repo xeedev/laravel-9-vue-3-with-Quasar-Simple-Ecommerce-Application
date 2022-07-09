@@ -58,6 +58,7 @@ class OrdersController extends BaseController
             [
                 'user_id' => $user_id,
                 'description' => $request->description,
+                'contact' => $request->contact,
                 'total' => $request->total,
                 'transaction_id' => $request->transaction_id,
                 'address' => $request->address,
@@ -75,9 +76,13 @@ class OrdersController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Order $order)
     {
-        //
+        if (is_null($order)) {
+            return $this->sendError('Order not found.');
+        }
+
+        return $this->sendResponse(new OrderResource($order), 'Order retrieved successfully.');
     }
 
     /**
@@ -98,9 +103,21 @@ class OrdersController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Order $order)
     {
-        //
+        $input = $request->all();
+
+        $validator = Validator::make($input, [
+            'status' => 'required',
+        ]);
+
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors());
+        }
+
+        $order->status = $input['status'];
+        $order->save();
+        return $this->sendResponse(new OrderResource($order), 'Order updated successfully.');
     }
 
     /**
@@ -109,8 +126,9 @@ class OrdersController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Order $order)
     {
-        //
+        $order->delete();
+        return $this->sendResponse([], 'Order deleted successfully.');
     }
 }
