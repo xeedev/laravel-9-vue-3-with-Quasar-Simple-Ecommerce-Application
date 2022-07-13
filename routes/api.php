@@ -23,6 +23,7 @@ use App\Http\Controllers\API\GalleryController;
 Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [RegisterController::class, 'login']);
 Route::post('gallery', [GalleryController::class, 'index']);
+Route::post('products', [ProductController::class, 'index']);
 
 Route::middleware('auth:api')->group( function () {
     Route::resource('products', ProductController::class);
