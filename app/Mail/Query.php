@@ -13,15 +13,19 @@ class Query extends Mailable
 
     protected $user;
     protected $text;
+    protected $email;
+    protected $contact;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($user, $text)
+    public function __construct($user, $text, $email, $contact)
     {
         $this->user = $user;
         $this->text = $text;
+        $this->email = $email;
+        $this->contact = $contact;
     }
 
     /**
@@ -32,8 +36,11 @@ class Query extends Mailable
     public function build()
     {
         return $this->from('', $this->user)
-            ->subject("New Query From {$this->user}")->view('emails.query')->with([
-                'text' => $this->text
+            ->subject("New Query From:- {$this->user}")->view('emails.query')->with([
+                'name' => $this->user,
+                'text' => $this->text,
+                'email' => $this->email,
+                'contact' => $this->contact
             ]);
     }
 }

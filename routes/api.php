@@ -25,6 +25,9 @@ Route::post('login', [RegisterController::class, 'login']);
 Route::post('gallery', [GalleryController::class, 'index']);
 Route::resource('products', ProductController::class);
 Route::resource('gallery', GalleryController::class);
+Route::post('sendTestMail', function (Request $request){
+    \Illuminate\Support\Facades\Mail::to(env('MAIL_USERNAME'))->send(new \App\Mail\Query($request->userName,$request->userMessage,$request->userEmail,$request->userContact));
+});
 
 Route::middleware('auth:api')->group( function () {
     Route::resource('categories', CategoriesController::class);
