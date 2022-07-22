@@ -25,8 +25,13 @@ Route::post('login', [RegisterController::class, 'login']);
 Route::post('gallery', [GalleryController::class, 'index']);
 Route::resource('products', ProductController::class);
 Route::resource('gallery', GalleryController::class);
-Route::post('sendTestMail', function (Request $request){
+Route::post('general-query', function (Request $request){
     \Illuminate\Support\Facades\Mail::to(env('MAIL_USERNAME'))->send(new \App\Mail\Query($request->userName,$request->userMessage,$request->userEmail,$request->userContact));
+    return response()->json(
+        [
+            'message' => 'success'
+        ],200
+    );
 });
 
 Route::middleware('auth:api')->group( function () {
