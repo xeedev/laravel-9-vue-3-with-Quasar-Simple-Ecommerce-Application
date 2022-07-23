@@ -7,6 +7,10 @@
 </head>
 <body class="antialiased">
 <div class="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center py-4 sm:pt-0">
+    @if(isset($product_id))
+        <p> {{$name}} wants to know about your product </p>
+        <a href="{{env('APP_URL').'/#/product/'.$product_id}}">{{env('APP_URL').'/#/product/'.$product_id}}</a>
+    @endif
     <h2>
         User Details:
     </h2>
