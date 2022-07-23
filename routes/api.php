@@ -26,7 +26,7 @@ Route::post('gallery', [GalleryController::class, 'index']);
 Route::resource('products', ProductController::class);
 Route::resource('gallery', GalleryController::class);
 Route::post('general-query', function (Request $request){
-    \Illuminate\Support\Facades\Mail::to(env('MAIL_USERNAME'))->send(new \App\Mail\Query($request->userName,$request->userMessage,$request->userEmail,$request->userContact));
+    \Illuminate\Support\Facades\Mail::to(env('MAIL_USERNAME'))->send(new \App\Mail\Query($request->userName,$request->userMessage,$request->userEmail,$request->userContact, $request->product_id ?? null));
     return response()->json(
         [
             'message' => 'success'
