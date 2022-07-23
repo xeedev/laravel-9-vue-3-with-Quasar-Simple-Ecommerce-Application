@@ -64,7 +64,7 @@ class OrdersController extends BaseController
                 'address' => $request->address,
                 'city' => $request->city,
                 'country' => $request->country,
-                'status' => $request->status,
+                'status' => 'unpaid',
             ]
         );
         return $this->sendResponse(new OrderResource($order), 'Order created successfully.');

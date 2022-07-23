@@ -15,17 +15,19 @@ class Query extends Mailable
     protected $text;
     protected $email;
     protected $contact;
+    protected $product_id;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($user, $text, $email, $contact)
+    public function __construct($user, $text, $email, $contact, $product_id = null)
     {
         $this->user = $user;
         $this->text = $text;
         $this->email = $email;
         $this->contact = $contact;
+        $this->product_id = $product_id;
     }
 
     /**
@@ -35,12 +37,23 @@ class Query extends Mailable
      */
     public function build()
     {
-        return $this->from('', $this->user)
-            ->subject("New Query From:- {$this->user}")->view('emails.query')->with([
-                'name' => $this->user,
-                'text' => $this->text,
-                'email' => $this->email,
-                'contact' => $this->contact
-            ]);
+        if (!$this->product_id){
+            return $this->from('', $this->user)
+                ->subject("New Query From:- {$this->user}")->view('emails.query')->with([
+                    'name' => $this->user,
+                    'text' => $this->text,
+                    'email' => $this->email,
+                    'contact' => $this->contact
+                ]);
+        }else{
+            return $this->from('', $this->user)
+                ->subject("Product Query From:- {$this->user}")->view('emails.query')->with([
+                    'name' => $this->user,
+                    'text' => $this->text,
+                    'email' => $this->email,
+                    'contact' => $this->contact,
+                    'product_id' => $this->product_id,
+                ]);
+        }
     }
 }
