@@ -20,7 +20,7 @@ class CreateOrdersTable extends Migration
             $table->text('description');
             $table->string('contact');
             $table->decimal('total',10,2)->default(0.00);
-            $table->string('transaction_id',10,2)->default(0.00);
+            $table->text('transaction_id')->default(000000);
             $table->text('address');
             $table->string('city')->nullable();
             $table->string('country')->nullable();
