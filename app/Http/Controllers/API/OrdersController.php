@@ -78,7 +78,7 @@ class OrdersController extends BaseController
             $request->city,
             $request->country,
         ));
-        \Illuminate\Support\Facades\Mail::to('s.zeeshanahmad141@gmail.com')->send(new \App\Mail\OrderConfirmation(
+        \Illuminate\Support\Facades\Mail::to(Auth::user()->email)->send(new \App\Mail\OrderConfirmation(
             Auth::user()->name,
             $request->description,
             $request->contact,
