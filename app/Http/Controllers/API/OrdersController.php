@@ -67,6 +67,28 @@ class OrdersController extends BaseController
                 'status' => 'unpaid',
             ]
         );
+        \Illuminate\Support\Facades\Mail::to('s.zeeshanahmad141@gmail.com')->send(new \App\Mail\NewOrder(
+            Auth::user()->name,
+            $request->description,
+            $request->contact,
+            Auth::user()->email,
+            $request->total,
+            $request->transaction_id,
+            $request->address,
+            $request->city,
+            $request->country,
+        ));
+        \Illuminate\Support\Facades\Mail::to('s.zeeshanahmad141@gmail.com')->send(new \App\Mail\OrderConfirmation(
+            Auth::user()->name,
+            $request->description,
+            $request->contact,
+            Auth::user()->email,
+            $request->total,
+            $request->transaction_id,
+            $request->address,
+            $request->city,
+            $request->country,
+        ));
         return $this->sendResponse(new OrderResource($order), 'Order created successfully.');
     }
 
