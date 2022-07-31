@@ -120,7 +120,7 @@ class GalleryController extends BaseController
 
         foreach ($files as $file) {
             $fName = $this->generateRandomString();
-            $filename = time() . '-' . $fName . '.' . $file->getClientOriginalExtension();
+            $filename = time() . '-' . $fName . '.' . $file->guessExtension();
             $url = Storage::disk('local')->putFileAs($storagePath, $file, $filename);
             $fileURLs[] = $url;
         }
