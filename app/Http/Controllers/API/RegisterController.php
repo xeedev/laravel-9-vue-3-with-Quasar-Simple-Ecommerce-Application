@@ -68,4 +68,19 @@ class RegisterController extends BaseController
         $user->revoke();
         return 'logged out';
     }
+
+    public function changePassword(Request  $request){
+        $validator = Validator::make($request->all(), [
+            'password' => 'required',
+            'id' => 'required|exists:users,id',
+        ]);
+
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors());
+        }
+        $user = User::find($request->id);
+        $user->password = bcrypt($request->password);
+        $user->save();
+        return $this->sendResponse($user, 'Password changed successfully.');
+    }
 }
